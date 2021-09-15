@@ -1,0 +1,88 @@
+`timescale 1ns / 1ps
+
+
+module fft_cordic_tb;
+
+	// Inputs
+	
+	
+	reg signed [16:0] xin0;
+	reg signed [16:0] xin1;
+	reg signed [16:0] xin2;
+	reg signed [16:0] xin3;
+	reg signed [16:0] xin4;
+	reg signed [16:0] xin5;
+	reg signed [16:0] xin6;
+	reg signed [16:0] xin7;
+
+	
+	reg cntrl;
+	reg clk;
+	reg rst;
+	reg init;
+	
+	
+
+	// Outputs
+	wire signed [16:0] xout0;
+	wire signed [16:0] xout4;
+	
+	wire signed [16:0] xrout1;
+	wire signed [16:0] xrout2;
+	wire signed [16:0] xrout3;
+	wire signed [16:0] xrout5;
+	wire signed [16:0] xrout6;
+	wire signed [16:0] xrout7;
+
+	
+	wire signed [16:0] xiout1;
+	wire signed [16:0] xiout2;
+	wire signed [16:0] xiout3;
+	wire signed [16:0] xiout5;
+	wire signed [16:0] xiout6;
+	wire signed [16:0] xiout7;
+	
+	fft_cordic(cntrl,clk,rst,init,xin0,xin1,xin2,xin3,xin4,xin5,xin6,xin7,xrout0,xrout1,xrout2,xrout3,xrout4,xrout5,xrout6,xrout7,xiout0,xiout1,xiout2,xiout3,xiout4,xiout5,xiout6,xiout7,xout8,);
+	
+	
+	
+	
+
+
+
+	always 
+#10 clk = ~clk;
+
+    initial 
+	 begin
+			clk=0;
+       
+		 
+		  
+		  #2 rst = 0;cntrl=0;init = 1;
+		  xin0=17'b00000000000010000000;xin4=17'b00000000000010000000;		  
+		  xin2=17'b00000000000000000000;xin6=17'b00000000000000000000;
+		  xin1=17'b00000000000000000000;xin5=17'b00000000000000000000;
+		  xin3=17'b00000000000000000000;xin7=17'b00000000000000000000;
+		  
+		  #15 init=0;
+		  #200 cntrl =1;
+		  //#100 ;
+		  
+		  //#2 rst = 0;cntrl=0;init = 1;
+		  //xin0=17'b00000000000010000000;xin4=17'b00000000000010000000;		  
+		  //xin2=17'b00000000000000000000;xin6=17'b00000000000000000000;
+		  //xin1=17'b00000000000000000000;xin5=17'b00000000000000000000;
+		  //xin3=17'b00000000000000000000;xin7=17'b00000000000000000000;
+	   
+		  //#15 init=0;
+		  //#200 cntrl =1;
+		  
+		  
+		  
+        #100 $finish;
+    end
+	 
+	 
+	 endmodule
+	 

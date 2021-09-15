@@ -1,0 +1,116 @@
+`timescale 1ns / 1ps
+
+
+module fft_16_cordic_tb;
+
+	// Inputs
+	
+	reg signed [16:0] xin0;
+	reg signed [16:0] xin1;
+	reg signed [16:0] xin2;
+	reg signed [16:0] xin3;
+	reg signed [16:0] xin4;
+	reg signed [16:0] xin5;
+	reg signed [16:0] xin6;
+	reg signed [16:0] xin7;
+	reg signed [16:0] xin8;
+	reg signed [16:0] xin9;
+	reg signed [16:0] xin10;
+	reg signed [16:0] xin11;
+	reg signed [16:0] xin12;
+	reg signed [16:0] xin13;
+	reg signed [16:0] xin14;
+	reg signed [16:0] xin15;
+
+
+	
+	reg cntrl;
+	reg clk;
+	reg rst;
+	reg init;
+	
+		//outputs
+	wire signed [16:0] xout0;
+	wire signed [16:0] xout8;
+	
+	wire signed [16:0] xrout1;
+	wire signed [16:0] xrout2;
+	wire signed [16:0] xrout3;
+	wire signed [16:0] xrout5;
+	wire signed [16:0] xrout6;
+	wire signed [16:0] xrout7;
+	
+	wire signed [16:0] xrout9;
+	wire signed [16:0] xrout10;
+	wire signed [16:0] xrout11;
+	wire signed [16:0] xrout12;
+	wire signed [16:0] xrout13;
+	wire signed [16:0] xrout14;
+	wire signed [16:0] xrout15;
+	
+	wire signed [16:0] xiout1;
+	wire signed [16:0] xiout2;
+	wire signed [16:0] xiout3;
+	wire signed [16:0] xiout5;
+	wire signed [16:0] xiout6;
+	wire signed [16:0] xiout7;
+	
+	wire signed [16:0] xiout9;
+	wire signed [16:0] xiout10;
+	wire signed [16:0] xiout11;
+	wire signed [16:0] xiout12;
+	wire signed [16:0] xiout13;
+	wire signed [16:0] xiout14;
+	wire signed [16:0] xiout15;
+
+	
+	
+	
+	fft_16_cordic f11 (cntrl,clk,rst,init,xin0,xin1,xin2,xin3,xin4,xin5,xin6,xin7,xin8,xin9,xin10,xin11,xin12,xin13,xin14,xin15,xout0,
+								xrout1,xrout2,xrout3,xrout4,xrout5,xrout6,xrout7,xout8,xrout9,xrout10,xrout11,xrout12,xrout13,xrout14,xrout15,
+								xiout1,xiout2,xiout3,xiout4,xiout5,xiout6,xiout7,xiout9,xiout10,xiout11,xiout12,xiout13,xiout14,xiout15);
+	
+	
+	
+
+
+
+	always 
+#10 clk = ~clk;
+
+    initial 
+	 begin
+			clk=0;
+       
+		 
+		  
+		  #2 rst = 0;cntrl=0;init = 1;
+		  xin0=17'b00000000000010000000;xin8=17'b00000000000010000000;		  
+		  xin2=17'b00000000000000000000;xin9=17'b00000000000000000000;
+		  xin1=17'b00000000000000000000;xin10=17'b00000000000000000000;
+		  xin3=17'b00000000000000000000;xin11=17'b00000000000000000000;
+		  xin4=17'b00000000000000000000;xin12=17'b00000000000000000000;		  
+		  xin5=17'b00000000000000000000;xin13=17'b00000000000000000000;
+		  xin6=17'b00000000000000000000;xin14=17'b00000000000000000000;
+		  xin7=17'b00000000000000000000;xin15=17'b00000000000000000000;  
+		  #15 init=0;
+		  #200 cntrl =1;
+		  //#100 ;
+		  
+		  //#2 rst = 0;cntrl=0;init = 1;
+		  //xin0=17'b00000000000010000000;xin4=17'b00000000000010000000;		  
+		  //xin2=17'b00000000000000000000;xin6=17'b00000000000000000000;
+		  //xin1=17'b00000000000000000000;xin5=17'b00000000000000000000;
+		  //xin3=17'b00000000000000000000;xin7=17'b00000000000000000000;
+	   
+		  //#15 init=0;
+		  //#200 cntrl =1;
+		  
+		  
+		  
+        #100 $finish;
+    end
+	 
+	 
+	 endmodule
+	 

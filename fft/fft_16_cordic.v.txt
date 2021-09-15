@@ -1,0 +1,192 @@
+`timescale 1ns / 1ps
+
+ 
+module fft_16_cordic(cntrl,clk,rst,init,xin0,xin1,xin2,xin3,xin4,xin5,xin6,xin7,xin8,xin9,xin10,xin11,xin12,xin13,xin14,xin15,xout0,
+								xrout1,xrout2,xrout3,xrout4,xrout5,xrout6,xrout7,xout8,xrout9,xrout10,xrout11,xrout12,xrout13,xrout14,xrout15,
+								xiout1,xiout2,xiout3,xiout4,xiout5,xiout6,xiout7,xiout9,xiout10,xiout11,xiout12,xiout13,xiout14,xiout15);
+
+// inputs
+	input cntrl;
+	input clk;
+	input rst;
+	input init;
+	input signed [16:0] xin0;
+	input signed [16:0] xin1;
+	input signed [16:0] xin2;
+	input signed [16:0] xin3;
+	input signed [16:0] xin4;
+	input signed [16:0] xin5;
+	input signed [16:0] xin6;
+	input signed [16:0] xin7;
+	input signed [16:0] xin8;
+	input signed [16:0] xin9;
+	input signed [16:0] xin10;
+	input signed [16:0] xin11;
+	input signed [16:0] xin12;
+	input signed [16:0] xin13;
+	input signed [16:0] xin14;
+	input signed [16:0] xin15;
+
+	
+	//outputs
+	output signed [16:0] xout0;
+	output signed [16:0] xout8;
+	
+	output signed [16:0] xrout1;
+	output signed [16:0] xrout2;
+	output signed [16:0] xrout3;
+	output signed [16:0] xrout4;
+	output signed [16:0] xrout5;
+	output signed [16:0] xrout6;
+	output signed [16:0] xrout7;
+	output signed [16:0] xrout9;
+	output signed [16:0] xrout10;
+	output signed [16:0] xrout11;
+	output signed [16:0] xrout12;
+	output signed [16:0] xrout13;
+	output signed [16:0] xrout14;
+	output signed [16:0] xrout15;
+	
+	output signed [16:0] xiout1;
+	output signed [16:0] xiout2;
+	output signed [16:0] xiout3;
+	output signed [16:0] xiout4;
+	output signed [16:0] xiout5;
+	output signed [16:0] xiout6;
+	output signed [16:0] xiout7;
+	output signed [16:0] xiout9;
+	output signed [16:0] xiout10;
+	output signed [16:0] xiout11;
+	output signed [16:0] xiout12;
+	output signed [16:0] xiout13;
+	output signed [16:0] xiout14;
+	output signed [16:0] xiout15;
+	
+	
+
+
+
+
+
+
+	//intermediate connections
+	
+	
+	wire signed [16:0] xffta0;
+	wire signed [16:0] xffta4;
+	
+	wire signed [16:0] xrffta1;
+	wire signed [16:0] xrffta2;
+	wire signed [16:0] xrffta3;
+	wire signed [16:0] xrffta5;
+	wire signed [16:0] xrffta6;
+	wire signed [16:0] xrffta7;
+	wire signed [16:0] xiffta1;
+	wire signed [16:0] xiffta2;
+	wire signed [16:0] xiffta3;
+	wire signed [16:0] xiffta5;
+	wire signed [16:0] xiffta6;
+	wire signed [16:0] xiffta7;
+	
+	
+	wire signed [16:0] xfftb0;
+	wire signed [16:0] xfftb4;
+	
+	wire signed [16:0] xrfftb1;
+	wire signed [16:0] xrfftb2;
+	wire signed [16:0] xrfftb3;
+	wire signed [16:0] xrfftb5;
+	wire signed [16:0] xrfftb6;
+	wire signed [16:0] xrfftb7;
+	wire signed [16:0] xifftb1;
+	wire signed [16:0] xifftb2;
+	wire signed [16:0] xifftb3;
+	wire signed [16:0] xifftb5;
+	wire signed [16:0] xifftb6;
+	wire signed [16:0] xifftb7;
+	
+
+
+	// theata declaration for cordic
+	
+	wire signed [16:0] angle0;
+	wire signed [16:0] angle1;
+	wire signed [16:0] angle2;
+	wire signed [16:0] angle3;
+	wire signed [16:0] angle4;
+	wire signed [16:0] angle5;
+	wire signed [16:0] angle6;
+	
+	
+	assign angle0 = 17'd12867;  // theata=22.5 degree=.39269 rad
+	assign angle1 = 17'd25735;  //theata=45 degree=0.7853 rad
+	assign angle2 = 17'd38603;  //theata=67.5 degree=1.1781rad
+	
+	assign angle3 = 17'd51471;  // theata=90 degree=1.57 rad
+	assign angle4 = 17'd64339;  //theata=112.5 degree=1.963 rad
+	assign angle5 = 17'd77207;  //theata=135 degree=2.356 rad
+	assign angle6 = 17'd90075;  //theata=157.5 degree=2.748 rad
+	//2-8 point fft
+	fft_cordic f1 (cntrl,clk,rst,init,xin0,xin1,xin2,xin3,xin4,xin5,xin6,xin7,xffta0,xrffta1,xrffta2,xrffta3,xffta4,xrffta5,xrffta6,xrffta7,xiffta1,xiffta2,xiffta3,xiffta5,xiffta6,xiffta7);
+	fft_cordic f2 (cntrl,clk,rst,init,xin8,xin9,xin10,xin11,xin12,xin13,xin14,xin15,xfftb0,xrfftb1,xrfftb2,xrfftb3,xfftb4,xrfftb5,xrfftb6,xrfftb7,xifftb1,xifftb2,xifftb3,xifftb5,xifftb6,xifftb7);
+	
+	//last stage- 1 addersubractor and 7 butterfly cordic
+	
+	addsub u7(xffta0,xfftb0,x0,x8);
+	
+	butterflycordic b5( cntrl,clk, rst, init,xrffta1,xiffta1, xrfftb1, xifftb1, angle0, xr1, xi1, xr9, xi9  );
+	butterflycordic b6( cntrl,clk, rst, init,xrffta2,xiffta2, xrfftb2, xifftb2, angle1, xr2, xi2, xr10, xi10  );
+	
+	butterflycordic b7( cntrl,clk, rst, init,xrffta3,xiffta3, xrfftb3, xifftb3, angle2, xr3, xi3, xr11, xi11  );
+	butterflycordic b8( cntrl,clk, rst, init,xffta4,0, xfftb4, 0, angle3, xr4, xi4, xr12, xi12  );
+
+	butterflycordic b9( cntrl,clk, rst, init,xrffta5,xiffta5, xrfftb5, xifftb5, angle4, xr5, xi5, xr13, xi13  );
+	butterflycordic b10( cntrl,clk, rst, init,xrffta6,xiffta6, xrfftb6, xifftb6, angle5, xr6, xi6, xr14, xi14  );
+	
+	butterflycordic b11( cntrl,clk, rst, init,xrffta7,xiffta7, xrfftb7, xifftb7, angle6, xr7, xi7, xr15, xi15  );
+	
+	
+
+assign xout0= x0;
+assign xout8=x8;
+
+assign xrout1=xr1;
+assign xiout1=xi1;
+assign xrout2=xr2;
+assign xiout2=xi2;
+assign xrout3=xr3;
+assign xiout3=xi3;
+assign xrout4=xr4;
+assign xiout4=xi4;
+assign xrout5=xr5;
+assign xiout5=xi5;
+assign xrout6=xr6;
+assign xiout6=xr6;
+assign xrout7=xr7;
+assign xiout7=xi7;
+
+
+assign xrout9=xr9;
+assign xiout9=xi9;
+assign xrout10=xr10;
+assign xiout10=xi10;
+assign xrout11=xr11;
+assign xiout11=xi11;
+assign xrout12=xr12;
+assign xiout12=xi12;
+assign xrout13=xr13;
+assign xiout13=xr13;
+assign xrout14=xr14;
+assign xiout14=xi14;
+assign xrout15=xr15;
+assign xiout15=xi15;
+
+
+
+
+
+
+
+
+
+endmodule 

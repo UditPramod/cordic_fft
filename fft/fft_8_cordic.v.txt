@@ -1,0 +1,143 @@
+timescale 1ns / 1ps
+
+module fft_cordic(cntrl,clk,rst,init,xin0,xin1,xin2,xin3,xin4,xin5,xin6,xin7,xout0,xrout1,xrout2,xrout3,xout4,xrout5,xrout6,xrout7,xiout1,xiout2,xiout3,xiout5,xiout6,xiout7);
+//inputs
+	input signed [16:0] xin0;
+	input signed [16:0] xin1;
+	input signed [16:0] xin2;
+	input signed [16:0] xin3;
+	input signed [16:0] xin4;
+	input signed [16:0] xin5;
+	input signed [16:0] xin6;
+	input signed [16:0] xin7;
+
+	
+	input cntrl;
+	input clk;
+	input rst;
+	input init;
+	// outputs
+	output signed [16:0] xout0;
+	output signed [16:0] xout4;
+	
+	output signed [16:0] xrout1;
+	output signed [16:0] xrout2;
+	output signed [16:0] xrout3;
+	output signed [16:0] xrout5;
+	output signed [16:0] xrout6;
+	output signed [16:0] xrout7;
+
+	
+	output signed [16:0] xiout1;
+	output signed [16:0] xiout2;
+	output signed [16:0] xiout3;
+	output signed [16:0] xiout5;
+	output signed [16:0] xiout6;
+	output signed [16:0] xiout7;
+
+
+
+
+
+	//intermediate connections
+	
+	
+	wire signed [16:0] stemp0;
+	wire signed [16:0] stemp1;
+	wire signed [16:0] stemp2;
+	wire signed [16:0] stemp3;
+	wire signed [16:0] stemp4;
+	wire signed [16:0] stemp5;
+	wire signed [16:0] stemp6;
+	
+	
+	wire signed [16:0] dtemp0;
+	wire signed [16:0] dtemp1;
+	wire signed [16:0] dtemp2;
+	wire signed [16:0] dtemp3;
+	wire signed [16:0] dtemp4;
+	wire signed [16:0] dtemp5;
+	wire signed [16:0] dtemp6;
+	
+	
+	
+	wire signed [16:0] ar0;
+	wire signed [16:0] ar1;
+	wire signed [16:0] ar2;
+	wire signed [16:0] ar3;
+	wire signed [16:0] ar4;
+
+	
+	wire signed [16:0] br0;
+	wire signed [16:0] br1;
+	wire signed [16:0] br2;
+	wire signed [16:0] br3;
+	wire signed [16:0] br4;
+
+	// theata declaration for cordic
+	
+	wire signed [16:0] angle0;
+	wire signed [16:0] angle1;
+	wire signed [16:0] angle2;
+	
+	/*//wire signed [16:0] angle_lut [0:7];
+	
+	//assign angle_lut[0] = 17'd25735;
+	//assign angle_lut[1] = 17'51471;
+	//assign angle_lut[2] = 17'77207;*/
+	
+	assign angle0 = 17'd25735;  // theata=90 degree=1.57 rad
+	assign angle1 = 17'd51471;  //theata=45 degree=0.7853 rad
+	assign angle2 = 17'd77207;  //theata=135 degree=2.356 rad
+	
+	//stage 1- 4 adder subractor
+	addsub u0(xin0,xin4,stemp0,dtemp0);
+	addsub u1(xin2,xin6,stemp1,dtemp1);
+	addsub u2(xin1,xin5,stemp2,dtemp2);
+	addsub u3(xin3,xin7,stemp3,dtemp3);
+	//#150;
+	
+		//stage 2- 2-adder subractor+ 2 butterfly cordic
+	addsub u4(stemp4,stemp1,stemp4,dtemp4);
+	addsub u5(stemp2,stemp3,stemp5,dtemp5);
+	
+	butterflycordic b0( cntrl,clk, rst, init,dtemp0,0, dtemp1, 0, angle0, ar0, ai0, br0, bi0  );
+	butterflycordic b1( cntrl,clk, rst, init,dtemp2,0, dtemp3, 0, angle0, ar1, ai1, br1, bi1  );
+	
+//#150;
+	
+	//stage 3- 1-adder subractor+ 3-butterfly cordic
+	addsub u6(stemp4,stemp5,stemp6,dtemp6);
+	
+	
+	butterflycordic b2( cntrl,clk, rst, init,dtemp4,0, dtemp5, 0, angle0, ar2, ai2, br2, bi2  );
+	butterflycordic b3( cntrl,clk, rst, init,ar0,ai0,ar1 ,ai1, angle1, ar3, ai3, br3, bi3  );
+	butterflycordic b4( cntrl,clk, rst, init,br0,bi0,br1 ,bi1, angle2, ar4, ai4, br4, bi4  );
+
+//#150
+
+assign xout0= stemp6;
+assign xout4=dtemp6;
+
+assign xrout2=ar2;
+assign xiout2=ai2;
+
+assign xrout6=br2;
+assign xiout6=bi2;
+
+assign xrout1=ar3;
+assign xiout1=ai3;
+
+assign xrout5=br3;
+assign xiout5=bi3;
+
+assign xrout3=ar4;
+assign xiout3=ai4;
+
+assign xrout7=br4;
+assign xiout7=bi4;
+
+
+
+
+endmodule 
